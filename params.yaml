@@ -12,7 +12,7 @@ split_data:
   train_path: artifacts/train.csv
   test_path: artifacts/test.csv
   test_size: 0.25
-  random_state: 42
+  random_state: 12
 
 estimators:
   RandomForest:

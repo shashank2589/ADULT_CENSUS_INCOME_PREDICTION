@@ -7,7 +7,7 @@ data_source:
   database : census
   collection: clean_data
 
-load_data:
+save_data:
   raw_dataset: artifacts/clean_data.csv
 
 split_data:

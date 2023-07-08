@@ -1,0 +1,14 @@
+{
+ "argv": [
+  "c:/Users/Dell/Census_Income_Prediction/ADULT_CENSUS_INCOME_PREDICTION/income\\python.exe",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "Python 3 (ipykernel)",
+ "language": "python",
+ "metadata": {
+  "debugger": true
+ }
+}

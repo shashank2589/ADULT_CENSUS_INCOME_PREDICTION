@@ -1,0 +1,25 @@
+project:
+  project_name: adult_census_income_prediction
+  target_col: income
+
+data_source:
+  mongodb_url: 
+
+load_data:
+  raw_dataset: artifacts/clean_data.csv
+
+split_data:
+  train_path: artifacts/train.csv
+  test_path: artifacts/test.csv
+  test_size: 0.25
+  random_state: 42
+
+estimators:
+  RandomForest:
+    params:
+
+
+
+model: 
+  saved_model: artifacts/model.pkl
+  preprocessor: artifacts/preprocessor.pkl

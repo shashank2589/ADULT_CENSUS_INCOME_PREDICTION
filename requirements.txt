@@ -1,0 +1,13 @@
+# local package
+-e .
+
+# external requirements
+dvc
+dvc[gdrive]
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+xgboost
+pymongo

@@ -24,7 +24,6 @@ def retrieve_data(config_path):
         db_name = config["data_source"]["database"]
         coll_name = config["data_source"]["collection"]
 
-        
         with MongoClient(data_path) as client:
             db = client[db_name]
             coll = db[coll_name]
@@ -38,7 +37,6 @@ def retrieve_data(config_path):
     except Exception as e:
         logging.info('Exception occured at Data Retrieval stage')
         raise CustomException(e,sys)
-
 
 if __name__=="__main__":
     args = argparse.ArgumentParser()

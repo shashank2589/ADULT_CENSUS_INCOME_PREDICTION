@@ -3,7 +3,9 @@ project:
   target_col: income
 
 data_source:
-  mongodb_url: 
+  mongodb_url: mongodb+srv://sunny:{password}@cluster0.gswp8ro.mongodb.net/?retryWrites=true&w=majority
+  database : census
+  collection: clean_data
 
 load_data:
   raw_dataset: artifacts/clean_data.csv

@@ -11,3 +11,4 @@ matplotlib
 seaborn
 xgboost
 pymongo
+python-dotenv

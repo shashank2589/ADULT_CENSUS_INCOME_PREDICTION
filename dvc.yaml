@@ -1,8 +1,12 @@
 stages:
-  save_data:
-    cmd: python src/save_data.py --config=params.yaml
+  save_and_split_data:
+    cmd: python src/save_and_split_data.py --config=params.yaml
     deps: 
     - src/retrieve_data.py
-    - src/save_data.py
+    - src/save_and_split_data.py
     outs:
     - artifacts/clean_data.csv
+    - artifacts/train.csv
+    - artifacts/test.csv
+
+  

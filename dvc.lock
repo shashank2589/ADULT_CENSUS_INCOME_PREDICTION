@@ -1,18 +1,26 @@
 schema: '2.0'
 stages:
-  save_data:
-    cmd: python src/save_data.py --config=params.yaml
+  save_and_split_data:
+    cmd: python src/save_and_split_data.py --config=params.yaml
     deps:
     - path: src/retrieve_data.py
       hash: md5
       md5: 2475b59d691ebf5e432f9eaa388d05a5
       size: 1535
-    - path: src/save_data.py
+    - path: src/save_and_split_data.py
       hash: md5
-      md5: ca0f9cabc2eea63d4ed3dbd23533e99c
-      size: 841
+      md5: 259ad1d94b9d924f1daa34706da416de
+      size: 1496
     outs:
     - path: artifacts/clean_data.csv
       hash: md5
       md5: 668305bbde40b709a3b2b620ba3bb05d
       size: 1825699
+    - path: artifacts/test.csv
+      hash: md5
+      md5: a4f29bbcdb9faee78488b4d81a40adcd
+      size: 365055
+    - path: artifacts/train.csv
+      hash: md5
+      md5: f7c3c6be3f51aa34d9d5e307c3749fd5
+      size: 1460820

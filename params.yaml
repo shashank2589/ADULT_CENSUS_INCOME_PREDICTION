@@ -7,13 +7,11 @@ data_source:
   database : census
   collection: clean_data
 
-save_data:
+save_and_split_data:
   raw_dataset: artifacts/clean_data.csv
-
-split_data:
   train_path: artifacts/train.csv
   test_path: artifacts/test.csv
-  test_size: 0.25
+  test_size: 0.20
   random_state: 12
 
 estimators:

@@ -24,3 +24,23 @@ stages:
       hash: md5
       md5: f7c3c6be3f51aa34d9d5e307c3749fd5
       size: 1460820
+  data_transformation:
+    cmd: python src/data_transformation.py --config=params.yaml
+    deps:
+    - path: src/data_transformation.py
+      hash: md5
+      md5: 1301ba5fd5ad0c2af7977ecd2a6d25a4
+      size: 3993
+    - path: src/retrieve_data.py
+      hash: md5
+      md5: 2475b59d691ebf5e432f9eaa388d05a5
+      size: 1535
+    - path: src/save_and_split_data.py
+      hash: md5
+      md5: 259ad1d94b9d924f1daa34706da416de
+      size: 1496
+    outs:
+    - path: artifacts/preprocessor.pkl
+      hash: md5
+      md5: 9739941d7d1d4af66c519ba22335b644
+      size: 3800

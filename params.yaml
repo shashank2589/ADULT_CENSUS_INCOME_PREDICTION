@@ -14,6 +14,10 @@ save_and_split_data:
   test_size: 0.20
   random_state: 12
 
+data_transformation:
+  preprocessor_path: artifacts/preprocessor.pkl
+
+
 estimators:
   RandomForest:
     params:
@@ -22,4 +26,3 @@ estimators:
 
 model: 
   saved_model: artifacts/model.pkl
-  preprocessor: artifacts/preprocessor.pkl

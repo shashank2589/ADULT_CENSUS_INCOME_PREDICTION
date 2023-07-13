@@ -29,8 +29,8 @@ stages:
     deps:
     - path: src/data_transformation.py
       hash: md5
-      md5: 1301ba5fd5ad0c2af7977ecd2a6d25a4
-      size: 3993
+      md5: 4866f5779433cbd609e2e78925d4c970
+      size: 3936
     - path: src/retrieve_data.py
       hash: md5
       md5: 2475b59d691ebf5e432f9eaa388d05a5
@@ -44,3 +44,27 @@ stages:
       hash: md5
       md5: 9739941d7d1d4af66c519ba22335b644
       size: 3800
+  model_trainer:
+    cmd: python src/model_training.py --config=params.yaml
+    deps:
+    - path: src/data_transformation.py
+      hash: md5
+      md5: 4866f5779433cbd609e2e78925d4c970
+      size: 3936
+    - path: src/model_training.py
+      hash: md5
+      md5: 85969bef1f6ae588eb99d8914937b81b
+      size: 3497
+    - path: src/retrieve_data.py
+      hash: md5
+      md5: 2475b59d691ebf5e432f9eaa388d05a5
+      size: 1535
+    - path: src/save_and_split_data.py
+      hash: md5
+      md5: 259ad1d94b9d924f1daa34706da416de
+      size: 1496
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 7c321fd230e65a5a029898f8d97a93a9
+      size: 353143

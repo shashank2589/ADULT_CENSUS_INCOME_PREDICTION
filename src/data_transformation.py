@@ -1,11 +1,9 @@
-import os
 import sys
 import argparse
 import pandas as pd
 from src.exception import CustomException
 from src.logger import logging
-from retrieve_data import read_params, retrieve_data
-from save_and_split_data import save_and_split_data
+from retrieve_data import read_params
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -42,7 +40,8 @@ def data_transformation(config_path):
         categorical_cols = ["education_group"]
         categorical_cols1 = ['occupation_group','Relationship_Group']
         # Define the custom ranking for ordinal variable
-        edu_category = ['Primary', 'Secondary', 'High School Graduation', 'Some College', "Associate's Degree", "Bachelor's Degree", "Master's Degree", "Professional Degree", 'Doctorate Degree']
+        edu_category = ['Primary', 'Secondary', 'High School Graduation', 'Some College', "Associate's Degree",
+                         "Bachelor's Degree", "Master's Degree", "Professional Degree", 'Doctorate Degree']
 
         logging.info('Pipeline Initiated')
         # Numerical Pipeline
@@ -90,8 +89,6 @@ def data_transformation(config_path):
     except Exception as e:
             logging.info("Error in Initiating Data Transformation Stage")
             raise CustomException(e,sys)
-
-
 
 
 if __name__=="__main__":

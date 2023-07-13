@@ -18,3 +18,12 @@ stages:
     outs:
       - artifacts/preprocessor.pkl
   
+  model_trainer:
+    cmd: python src/model_training.py --config=params.yaml
+    deps: 
+      - src/retrieve_data.py
+      - src/save_and_split_data.py
+      - src/data_transformation.py
+      - src/model_training.py
+    outs:
+      - models/model.pkl

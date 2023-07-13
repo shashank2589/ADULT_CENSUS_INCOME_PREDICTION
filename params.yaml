@@ -17,12 +17,5 @@ save_and_split_data:
 data_transformation:
   preprocessor_path: artifacts/preprocessor.pkl
 
-
-estimators:
-  RandomForest:
-    params:
-
-
-
 model: 
-  saved_model: artifacts/model.pkl
+  saved_model: models/model.pkl

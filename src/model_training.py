@@ -4,6 +4,7 @@ from retrieve_data import read_params
 import pickle
 from src.exception import CustomException
 from src.logger import logging
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from data_transformation import data_transformation
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
@@ -13,6 +14,14 @@ import xgboost as xgb
 import warnings
 import json
 warnings.filterwarnings('ignore')
+
+def scores_evaluation(actual, predicted):
+    accuracy = accuracy_score(actual, predicted) 
+    precision = precision_score(actual, predicted)
+    recall = recall_score(actual, predicted)
+    f1 = f1_score(actual, predicted)
+    auc = roc_auc_score(actual, predicted)
+    return accuracy, precision, recall, f1, auc
 
 def model_trainer(config_path):
     logging.info('Model Trainer initiated')
@@ -39,9 +48,9 @@ def model_trainer(config_path):
             y_train_pred = model.predict(X_train)
             # Predict Testing data
             y_test_pred = model.predict(X_test)
-            # Get R2 scores for train data
+            # Get Accuracy scores for train data
             train_model_score = accuracy_score(y_train, y_train_pred) * 100
-            # Get R2 scores for test data
+            # Get Accuracy scores for test data
             test_model_score = accuracy_score(y_test, y_test_pred) * 100
 
             train_report[model_name] = train_model_score.round(2)
@@ -59,10 +68,24 @@ def model_trainer(config_path):
         list(test_report.values()).index(best_model_score)]
             
         best_model = models[best_model_name]
-
+        predicted = best_model.predict(X_test)
         print(f'Best Model Found , Model Name : {best_model_name} , Accuracy Score : {best_model_score.round(2)} percent')
         print('\n', '='*50, '\n')
         logging.info(f'Best Model Found , Model Name : {best_model_name} , Accuracy Score : {best_model_score.round(2)} percent')
+
+        (accuracy, precision, recall, f1, auc) = scores_evaluation(y_test, predicted=predicted)
+
+        metrics_file = config["reports"]["scores"]
+        with open(metrics_file, "w") as f:
+             scores = {
+                 "accuracy" : accuracy,
+                 "precision" : precision,
+                 "recall" : recall,
+                 "f1 Score" : f1,
+                 "roc_auc_score" : auc
+             }
+             json.dump(scores, f)
+        logging.info('Metrics Scores file saved')
 
         with open(model_path, "wb") as file:
              pickle.dump(best_model, file)

@@ -25,5 +25,8 @@ stages:
       - src/save_and_split_data.py
       - src/data_transformation.py
       - src/model_training.py
+    metrics:
+      - reports/best_model_scores.json:
+          cache: false
     outs:
       - models/model.pkl

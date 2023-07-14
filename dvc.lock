@@ -29,8 +29,8 @@ stages:
     deps:
     - path: src/data_transformation.py
       hash: md5
-      md5: 4866f5779433cbd609e2e78925d4c970
-      size: 3936
+      md5: 01d0c999e945661490c7a73ed38db3b3
+      size: 3557
     - path: src/retrieve_data.py
       hash: md5
       md5: 2475b59d691ebf5e432f9eaa388d05a5
@@ -49,12 +49,12 @@ stages:
     deps:
     - path: src/data_transformation.py
       hash: md5
-      md5: 4866f5779433cbd609e2e78925d4c970
-      size: 3936
+      md5: 01d0c999e945661490c7a73ed38db3b3
+      size: 3557
     - path: src/model_training.py
       hash: md5
-      md5: 85969bef1f6ae588eb99d8914937b81b
-      size: 3497
+      md5: eaf41ff4ade1f07f38c650d4b5937f97
+      size: 4500
     - path: src/retrieve_data.py
       hash: md5
       md5: 2475b59d691ebf5e432f9eaa388d05a5
@@ -68,3 +68,7 @@ stages:
       hash: md5
       md5: 7c321fd230e65a5a029898f8d97a93a9
       size: 353143
+    - path: reports/best_model_scores.json
+      hash: md5
+      md5: 79b8244e360e8535bdd6ad96a72c928c
+      size: 164

@@ -34,38 +34,24 @@ def data_transformation(config_path):
         test_X = test_df.drop(target_col, axis=1)
 
         # Divide the columns into categorical and numerical
-        numerical_cols = ['age', 'capital-gain', 'capital-loss', 'hours-per-week',
-       'marital_status_group', 'native_group', 'workclass_group', 'race_group',
-       'sex_group']
-        categorical_cols = ["education_group"]
-        categorical_cols1 = ['occupation_group','Relationship_Group']
+        numerical_cols = config["data_transformation"]["numerical_cols"]
+        categorical_cols = config["data_transformation"]["categorical_cols"]
+        categorical_cols1 = config["data_transformation"]["categorical_cols1"]
         # Define the custom ranking for ordinal variable
-        edu_category = ['Primary', 'Secondary', 'High School Graduation', 'Some College', "Associate's Degree",
-                         "Bachelor's Degree", "Master's Degree", "Professional Degree", 'Doctorate Degree']
+        edu_category = config["data_transformation"]["edu_category"]
 
         logging.info('Pipeline Initiated')
+
         # Numerical Pipeline
-        num_pipeline=Pipeline(
-            steps=[
-            ('imputer',SimpleImputer(strategy='median')),
-            ('scaler',StandardScaler())
-            ]
-        )
+        num_pipeline=Pipeline(steps=[('imputer',SimpleImputer(strategy='median')),
+            ('scaler',StandardScaler())])
         
         # Categorigal Pipeline
-        cat_pipeline=Pipeline(
-            steps=[
-            ('imputer',SimpleImputer(strategy='most_frequent')),
-            ('ordinalencoder',OrdinalEncoder(categories=[edu_category])),
-            ]
-        )
+        cat_pipeline=Pipeline(steps=[('imputer',SimpleImputer(strategy='most_frequent')),
+            ('ordinalencoder',OrdinalEncoder(categories=[edu_category])),])
 
-        cat_pipeline1=Pipeline(
-            steps=[
-            ('imputer',SimpleImputer(strategy='most_frequent')),
-            ('onehotencoder',OneHotEncoder(handle_unknown = "ignore")),
-            ]
-        )
+        cat_pipeline1=Pipeline(steps=[('imputer',SimpleImputer(strategy='most_frequent')),
+            ('onehotencoder',OneHotEncoder(handle_unknown = "ignore")),])
 
         # Combine
         preprocessor=ColumnTransformer([

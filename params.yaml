@@ -16,6 +16,15 @@ save_and_split_data:
 
 data_transformation:
   preprocessor_path: artifacts/preprocessor.pkl
-
+  numerical_cols: ['age', 'capital-gain', 'capital-loss', 'hours-per-week',
+       'marital_status_group', 'native_group', 'workclass_group', 'race_group',
+       'sex_group']
+  categorical_cols: ["education_group"]
+  categorical_cols1: ['occupation_group','Relationship_Group']
+  edu_category: ['Primary', 'Secondary', 'High School Graduation', 'Some College', "Associate's Degree",
+                "Bachelor's Degree", "Master's Degree", "Professional Degree", 'Doctorate Degree']
 model: 
   saved_model: models/model.pkl
+
+reports:
+  scores: reports/best_model_scores.json

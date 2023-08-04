@@ -8,19 +8,22 @@ from pymongo import MongoClient
 from src.exception import CustomException
 from src.logger import logging
 
+
 def read_params(config_path):
     with open(config_path) as yaml_file:
         config = yaml.safe_load(yaml_file)
     return config
+
 
 def retrieve_data(config_path):
     logging.info('Data Retrieving from MongoDB Database Starts')
     try:
         load_dotenv(find_dotenv())
         password = os.environ.get("mongodb_pwd")
+        username = os.environ.get("mongo_username")
         config = read_params(config_path)
         data_path = config["data_source"]["mongodb_url"]
-        data_path = data_path.replace("{password}", password)
+        data_path = data_path.replace("{password}", password).replace("{username}", username)
         db_name = config["data_source"]["database"]
         coll_name = config["data_source"]["collection"]
 
@@ -36,9 +39,10 @@ def retrieve_data(config_path):
 
     except Exception as e:
         logging.info('Exception occured at Data Retrieval stage')
-        raise CustomException(e,sys)
+        raise CustomException(e, sys)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()

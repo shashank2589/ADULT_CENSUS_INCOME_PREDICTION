@@ -9,7 +9,7 @@ from data_transformation import data_transformation
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
+from sklearn.ensemble import RandomForestClassifier, BaggingClassifier, AdaBoostClassifier
 import xgboost as xgb
 import warnings
 import json
@@ -32,11 +32,12 @@ def model_trainer(config_path):
         model_path = config["model"]["saved_model"]
         X_train, X_test, y_train, y_test = data_transformation(config_path)
         models = {
-            'Decision_Tree': DecisionTreeClassifier(min_samples_leaf=3, max_depth=7, min_samples_split=2),
-            'Random_Forest': RandomForestClassifier(n_estimators=300, min_samples_split=10, max_depth=10),
-            'Bagging': BaggingClassifier(base_estimator=DecisionTreeClassifier(min_samples_leaf=3, max_depth=7, min_samples_split=2), n_estimators=100),
-            'XGBoost': xgb.XGBClassifier(n_estimators=149, max_depth=5, learning_rate=0.053823386514435315),
-            'Logistic_Regression': LogisticRegression()
+            'Decision_Tree': DecisionTreeClassifier(min_samples_leaf=1, max_depth=7, min_samples_split=2),
+            'Random_Forest': RandomForestClassifier(n_estimators=150, class_weight='balanced', max_depth=10),
+            'Bagging': BaggingClassifier(base_estimator=DecisionTreeClassifier(min_samples_leaf=1, max_depth=7, min_samples_split=2), n_estimators=100),
+            'XGBoost': xgb.XGBClassifier(n_estimators=122, max_depth=3, learning_rate=0.4313788899225024, scale_pos_weight=2.6),
+            'Logistic_Regression': LogisticRegression(),
+            'Adaboost': AdaBoostClassifier(learning_rate=1.0, n_estimators=1000)
         }
 
         train_report = {}
@@ -50,10 +51,10 @@ def model_trainer(config_path):
             y_train_pred = model.predict(X_train)
             # Predict Testing data
             y_test_pred = model.predict(X_test)
-            # Get Accuracy scores for train data
-            train_model_score = accuracy_score(y_train, y_train_pred) * 100
-            # Get Accuracy scores for test data
-            test_model_score = accuracy_score(y_test, y_test_pred) * 100
+            # Get f1 scores for train data
+            train_model_score = roc_auc_score(y_train, y_train_pred) * 100
+            # Get f1 scores for test data
+            test_model_score = roc_auc_score(y_test, y_test_pred) * 100
 
             train_report[model_name] = train_model_score.round(2)
             test_report[model_name] = test_model_score.round(2)
@@ -72,10 +73,10 @@ def model_trainer(config_path):
         best_model = models[best_model_name]
         predicted = best_model.predict(X_test)
         print(
-            f'Best Model Found , Model Name : {best_model_name} , Accuracy Score : {best_model_score.round(2)} percent')
+            f'Best Model Found , Model Name : {best_model_name} , roc_auc_score : {best_model_score.round(2)} percent')
         print('\n', '='*50, '\n')
         logging.info(
-            f'Best Model Found , Model Name : {best_model_name} , Accuracy Score : {best_model_score.round(2)} percent')
+            f'Best Model Found , Model Name : {best_model_name} , roc_auc_score : {best_model_score.round(2)} percent')
 
         (accuracy, precision, recall, f1, auc) = scores_evaluation(
             y_test, predicted=predicted)

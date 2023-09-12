@@ -19,10 +19,11 @@ def save_and_split_data(config_path):
         test_data_path = config["save_and_split_data"]["test_path"]
         test_size = config["save_and_split_data"]["test_size"]
         random_state = config["save_and_split_data"]["random_state"]
+        target_col = config["project"]["target_col"]
 
         df = pd.read_csv(raw_data_path, sep=",")
         train_data, test_data = train_test_split(
-            df, test_size=test_size, random_state=random_state)
+            df, test_size=test_size, random_state=random_state, stratify=df[target_col])
         train_data.to_csv(train_data_path, index=False)
         test_data.to_csv(test_data_path, index=False)
         logging.info('Ingestion of Data is completed')

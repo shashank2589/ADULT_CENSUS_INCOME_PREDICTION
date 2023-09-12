@@ -7,7 +7,7 @@ from retrieve_data import read_params
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OrdinalEncoder, StandardScaler, OneHotEncoder
+from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 import pickle
 
 
@@ -44,8 +44,7 @@ def data_transformation(config_path):
         logging.info('Pipeline Initiated')
 
         # Numerical Pipeline
-        num_pipeline = Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
-                                       ('scaler', StandardScaler())])
+        num_pipeline = Pipeline(steps=[('imputer', SimpleImputer(strategy='median'))])
 
         # Categorigal Pipeline
         cat_pipeline = Pipeline(steps=[('imputer', SimpleImputer(strategy='most_frequent')),

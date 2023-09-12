@@ -11,8 +11,8 @@ save_and_split_data:
   raw_dataset: artifacts/clean_data.csv
   train_path: artifacts/train.csv
   test_path: artifacts/test.csv
-  test_size: 0.20
-  random_state: 12
+  test_size: 0.29
+  random_state: 21
 
 data_transformation:
   preprocessor_path: artifacts/preprocessor.pkl

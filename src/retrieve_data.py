@@ -26,6 +26,7 @@ def retrieve_data(config_path):
         data_path = data_path.replace("{password}", password).replace("{username}", username)
         db_name = config["data_source"]["database"]
         coll_name = config["data_source"]["collection"]
+        raw_data_path = config["retrieve_data"]["raw_dataset"]
 
         with MongoClient(data_path) as client:
             db = client[db_name]
@@ -34,8 +35,9 @@ def retrieve_data(config_path):
             list_cursor = list(dataset)
             df = pd.DataFrame(list_cursor)
             df = df.drop("_id", axis=1)
+       
+        df.to_csv(raw_data_path, index=False)
         logging.info('Retrieval of Data is completed')
-        return df
 
     except Exception as e:
         logging.info('Exception occured at Data Retrieval stage')

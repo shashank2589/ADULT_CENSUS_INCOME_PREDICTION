@@ -1,28 +1,37 @@
 stages:
+  retrieve_data:
+    cmd: python src/retrieve_data.py --config=params.yaml
+    deps:
+    - src/retrieve_data.py
+    outs:
+    - artifacts/clean_data.csv
+
   save_and_split_data:
     cmd: python src/save_and_split_data.py --config=params.yaml
     deps: 
-    - src/retrieve_data.py
     - src/save_and_split_data.py
-    outs:
     - artifacts/clean_data.csv
+    outs:
     - artifacts/train.csv
     - artifacts/test.csv
 
   data_transformation:
     cmd: python src/data_transformation.py --config=params.yaml
     deps: 
-      - src/retrieve_data.py
-      - src/save_and_split_data.py
+      - artifacts/train.csv
+      - artifacts/test.csv
       - src/data_transformation.py
+    params:
+      - data_transformation.numerical_cols
+      - data_transformation.categorical_cols
+      - data_transformation.categorical_cols1
+      - data_transformation.edu_category
     outs:
       - artifacts/preprocessor.pkl
   
   model_trainer:
     cmd: python src/model_training.py --config=params.yaml
     deps: 
-      - src/retrieve_data.py
-      - src/save_and_split_data.py
       - src/data_transformation.py
       - src/model_training.py
     metrics:

@@ -7,8 +7,10 @@ data_source:
   database : census
   collection: clean_data
 
-save_and_split_data:
+retrieve_data:
   raw_dataset: artifacts/clean_data.csv
+  
+save_and_split_data:
   train_path: artifacts/train.csv
   test_path: artifacts/test.csv
   test_size: 0.29

@@ -1,21 +1,29 @@
 schema: '2.0'
 stages:
-  save_and_split_data:
-    cmd: python src/save_and_split_data.py --config=params.yaml
+  retrieve_data:
+    cmd: python src/retrieve_data.py --config=params.yaml
     deps:
     - path: src/retrieve_data.py
       hash: md5
-      md5: 987751f1b5bc608ad1827359d5f76c8d
-      size: 1631
-    - path: src/save_and_split_data.py
-      hash: md5
-      md5: 9b7a16159df0621f4800fedf4a748a28
-      size: 1598
+      md5: bf1792522a53911e7804696f14afc316
+      size: 1732
     outs:
     - path: artifacts/clean_data.csv
       hash: md5
       md5: d978eea33eb94be102f6d5735722c60e
       size: 2047813
+  save_and_split_data:
+    cmd: python src/save_and_split_data.py --config=params.yaml
+    deps:
+    - path: artifacts/clean_data.csv
+      hash: md5
+      md5: d978eea33eb94be102f6d5735722c60e
+      size: 2047813
+    - path: src/save_and_split_data.py
+      hash: md5
+      md5: 8d214f6006b4bed3c9e7bab1e724d32d
+      size: 1504
+    outs:
     - path: artifacts/test.csv
       hash: md5
       md5: f9610cd5ae1ee015a92506c364fafd08
@@ -27,18 +35,45 @@ stages:
   data_transformation:
     cmd: python src/data_transformation.py --config=params.yaml
     deps:
+    - path: artifacts/test.csv
+      hash: md5
+      md5: f9610cd5ae1ee015a92506c364fafd08
+      size: 593132
+    - path: artifacts/train.csv
+      hash: md5
+      md5: 4365d5ed65371fb7382c8091743f17f2
+      size: 1454864
     - path: src/data_transformation.py
       hash: md5
       md5: a03c7e79ae7ed70d662a9360d8d3950c
       size: 3568
-    - path: src/retrieve_data.py
-      hash: md5
-      md5: 987751f1b5bc608ad1827359d5f76c8d
-      size: 1631
-    - path: src/save_and_split_data.py
-      hash: md5
-      md5: 9b7a16159df0621f4800fedf4a748a28
-      size: 1598
+    params:
+      params.yaml:
+        data_transformation.categorical_cols:
+        - education_group
+        data_transformation.categorical_cols1:
+        - occupation_group
+        - Relationship_Group
+        data_transformation.edu_category:
+        - Primary
+        - Secondary
+        - High School Graduation
+        - Some College
+        - Associate's Degree
+        - Bachelor's Degree
+        - Master's Degree
+        - Professional Degree
+        - Doctorate Degree
+        data_transformation.numerical_cols:
+        - age
+        - capital-gain
+        - capital-loss
+        - hours-per-week
+        - marital_status_group
+        - native_group
+        - workclass_group
+        - race_group
+        - sex_group
     outs:
     - path: artifacts/preprocessor.pkl
       hash: md5
@@ -55,14 +90,6 @@ stages:
       hash: md5
       md5: 5b986289bee1d577914e0128d3434286
       size: 4636
-    - path: src/retrieve_data.py
-      hash: md5
-      md5: 987751f1b5bc608ad1827359d5f76c8d
-      size: 1631
-    - path: src/save_and_split_data.py
-      hash: md5
-      md5: 9b7a16159df0621f4800fedf4a748a28
-      size: 1598
     outs:
     - path: models/model.pkl
       hash: md5

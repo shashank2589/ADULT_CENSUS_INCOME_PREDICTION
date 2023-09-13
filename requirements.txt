@@ -12,3 +12,4 @@ seaborn
 xgboost
 pymongo
 python-dotenv
+Flask

@@ -1,0 +1,98 @@
+<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Selection</title>
+</head>
+<body>
+    <div class="form">
+    <h2>Select Features</h2>
+    <form action="/predict" method="post">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="17" required><br>
+
+        <label for="workclass_group">Workclass:</label>
+        <select id="workclass_group" name="workclass_group" required>
+            <option value="1">Private</option>
+            <option value="0">Other</option>
+        </select><br>
+
+        <label for="fnlwgt">fnlwgt:</label>
+        <input type="number" id="fnlwgt" name="fnlwgt" min="12000" required><br>
+
+        <label for="education_group">Education:</label>
+        <select id="education_group" name="education_group" required>
+            <option value="Primary">Primary</option>
+            <option value="Secondary">Secondary</option>
+            <option value="High School Graduation">High School Graduation</option>
+            <option value="Some College">Some College</option>
+            <option value="Associate's Degree">Associate's Degree</option>
+            <option value="Bachelor's Degree">Bachelor's Degree</option>
+            <option value="Master's Degree">Master's Degree</option>
+            <option value="Professional Degree">Professional Degree</option>
+            <option value="Doctorate Degree">Doctorate Degree</option>
+        </select><br>
+
+        <label for="native_group">Native Country:</label>
+        <select id="native_group" name="native_group" required>
+            <option value="1">United States</option>
+            <option value="0">Other</option>
+        </select><br>
+
+        <label for="hours-per-week">Hours Per Week:</label>
+        <input type="number" id="hours-per-week" name="hours-per-week" min="1" required><br>
+
+        <label for="race_group">Race:</label>
+        <select id="race_group" name="race_group" required>
+            <option value="1">White</option>
+            <option value="0">Other</option>
+        </select><br>
+
+        <label for="sex_group">Gender:</label>
+        <select id="sex_group" name="sex_group" required>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+        </select><br>
+
+        <label for="marital_status_group">Marital Status:</label>
+        <select id="marital_status_group" name="marital_status_group" required>
+            <option value="1">Married</option>
+            <option value="0">Single</option>
+        </select><br>
+
+        <label for="occupation_group">Occupation:</label>
+        <select id="occupation_group" name="occupation_group" required>
+            <option value="Skilled">Skilled</option>
+            <option value="Service">Service</option>
+            <option value="Sales">Sales</option>
+            <option value="Management">Management</option>
+            <option value="Professional">Professional</option>
+            <option value="Other">Other</option>
+        </select><br>
+
+        <label for="Relationship_Group">Relationship Status:</label>
+        <select id="Relationship_Group" name="Relationship_Group" required>
+            <option value="Spouse">Spouse</option>
+            <option value="Child">Child</option>
+            <option value="Family">Family</option>
+        </select><br>
+
+        <label for="capital-gain">capital-gain:</label>
+        <input type="number" id="capital-gain" name="capital-gain" min="0" required><br>
+
+        <label for="capital-loss">capital-loss:</label>
+        <input type="number" id="capital-loss" name="capital-loss" min="0" required><br>
+
+        <input type="submit" value="Predict">
+    </form>
+    </div>
+
+     <div class="result">
+        {% if prediction_result %}
+        <h2>Prediction Result:</h2>
+        <h2><p>{{ prediction_result }}</p></h2>
+        {% endif %}
+    </div>
+</body>
+</html>

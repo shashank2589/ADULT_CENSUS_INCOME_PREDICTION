@@ -12,9 +12,7 @@ def save_and_split_data(config_path):
     logging.info('Save and split data method Starts')
     try:
         config = read_params(config_path)
-        df = retrieve_data(config_path)
-        raw_data_path = config["save_and_split_data"]["raw_dataset"]
-        df.to_csv(raw_data_path, index=False)
+        raw_data_path = config["retrieve_data"]["raw_dataset"]
         train_data_path = config["save_and_split_data"]["train_path"]
         test_data_path = config["save_and_split_data"]["test_path"]
         test_size = config["save_and_split_data"]["test_size"]

@@ -13,3 +13,4 @@ xgboost
 pymongo
 python-dotenv
 Flask
+mlflow

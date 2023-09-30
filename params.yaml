@@ -26,7 +26,15 @@ data_transformation:
   edu_category: ['Primary', 'Secondary', 'High School Graduation', 'Some College', "Associate's Degree",
                 "Bachelor's Degree", "Master's Degree", "Professional Degree", 'Doctorate Degree']
 model: 
-  saved_model: models/model.pkl
+  saved_model: models/best_model.pkl
 
 reports:
   scores: reports/best_model_scores.json
+
+mlflow_config:
+  artifacts_dir: mlflow_artifacts
+  experiment_name: ModelComparision
+  remote_server_uri: http://localhost:1234
+
+roc_auc:
+  threshold: 84

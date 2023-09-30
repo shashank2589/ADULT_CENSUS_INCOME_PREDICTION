@@ -34,8 +34,8 @@ stages:
     deps: 
       - src/data_transformation.py
       - src/model_training.py
-    metrics:
-      - reports/best_model_scores.json:
-          cache: false
-    outs:
-      - models/model.pkl
+  
+  best_production_model:
+    cmd: python src/best_model_for_production.py --config=params.yaml
+    deps: 
+      - src/best_model_for_production.py

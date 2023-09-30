@@ -1,10 +1,9 @@
-import os
 import sys
 import argparse
 import pandas as pd
 from src.exception import CustomException
 from src.logger import logging
-from retrieve_data import read_params, retrieve_data
+from retrieve_data import read_params
 from sklearn.model_selection import train_test_split
 
 

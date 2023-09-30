@@ -1,36 +1,47 @@
 import sys
 import argparse
-from retrieve_data import read_params
 import pickle
-from src.exception import CustomException
-from src.logger import logging
+import json
+import mlflow
+from mlflow import sklearn
+from retrieve_data import read_params
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from data_transformation import data_transformation
-from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, BaggingClassifier, AdaBoostClassifier
 import xgboost as xgb
 import warnings
-import json
+from src.exception import CustomException
+from src.logger import logging
+
 warnings.filterwarnings('ignore')
 
-
+# Function to calculate evaluation metrics
 def scores_evaluation(actual, predicted):
-    accuracy = accuracy_score(actual, predicted)
-    precision = precision_score(actual, predicted)
-    recall = recall_score(actual, predicted)
-    f1 = f1_score(actual, predicted)
-    auc = roc_auc_score(actual, predicted)
-    return accuracy, precision, recall, f1, auc
+    accuracy = accuracy_score(actual, predicted) * 100
+    precision = precision_score(actual, predicted) * 100
+    recall = recall_score(actual, predicted) * 100
+    f1 = f1_score(actual, predicted) * 100
+    roc_auc = roc_auc_score(actual, predicted) * 100
+    return accuracy, precision, recall, f1, roc_auc
 
-
+# Main function for model training
 def model_trainer(config_path):
     logging.info('Model Trainer initiated')
+    
     try:
         config = read_params(config_path)
-        model_path = config["model"]["saved_model"]
         X_train, X_test, y_train, y_test = data_transformation(config_path)
+        mlflow_config = config["mlflow_config"]
+        remote_server_uri = mlflow_config["remote_server_uri"]
+        
+        # Initialize MLflow with remote server URI
+        mlflow.set_tracking_uri(remote_server_uri)
+        
+        # Set the experiment name
+        mlflow.set_experiment(mlflow_config["experiment_name"])
+        
         models = {
             'Decision_Tree': DecisionTreeClassifier(min_samples_leaf=1, max_depth=7, min_samples_split=2),
             'Random_Forest': RandomForestClassifier(n_estimators=150, class_weight='balanced', max_depth=10),
@@ -40,68 +51,32 @@ def model_trainer(config_path):
             'Adaboost': AdaBoostClassifier(learning_rate=1.0, n_estimators=1000)
         }
 
-        train_report = {}
-        test_report = {}
-        for i in range(len(models)):
-            model_name = list(models.keys())[i]
-            model = models[model_name]
-            # Train model
-            model.fit(X_train, y_train)
-            # Predict Training data
-            y_train_pred = model.predict(X_train)
-            # Predict Testing data
-            y_test_pred = model.predict(X_test)
-            # Get f1 scores for train data
-            train_model_score = roc_auc_score(y_train, y_train_pred) * 100
-            # Get f1 scores for test data
-            test_model_score = roc_auc_score(y_test, y_test_pred) * 100
+        for model_name, model in models.items():
+            with mlflow.start_run(run_name=model_name):
+                # Log model name as a parameter
+                mlflow.log_param("model_name", model_name)
+                
+                # Train model
+                model.fit(X_train, y_train)
+                
+                # Predict Testing data
+                y_test_pred = model.predict(X_test)
+                
+                # Calculate and log evaluation metrics
+                (accuracy, precision, recall, f1, roc_auc) = scores_evaluation(y_test, predicted=y_test_pred)
 
-            train_report[model_name] = train_model_score.round(2)
-            test_report[model_name] = test_model_score.round(2)
-        print(train_report)
-        print(test_report)
-        print('\n', '='*50, '\n')
-        logging.info(f'Train Model Report : {train_report}')
-        logging.info(f'Test Model Report : {test_report}')
+                mlflow.log_metric("accuracy", accuracy)
+                mlflow.log_metric("precision", precision)
+                mlflow.log_metric("recall", recall)
+                mlflow.log_metric("f1_score", f1)
+                mlflow.log_metric("roc_auc_score", roc_auc)
 
-        # To get best model score from dictionary
-        best_model_score = max(test_report.values())
+                # Log the model to MLflow
+                mlflow.sklearn.log_model(model, "model", registered_model_name=model_name)
 
-        best_model_name = list(test_report.keys())[
-            list(test_report.values()).index(best_model_score)]
-
-        best_model = models[best_model_name]
-        predicted = best_model.predict(X_test)
-        print(
-            f'Best Model Found , Model Name : {best_model_name} , roc_auc_score : {best_model_score.round(2)} percent')
-        print('\n', '='*50, '\n')
-        logging.info(
-            f'Best Model Found , Model Name : {best_model_name} , roc_auc_score : {best_model_score.round(2)} percent')
-
-        (accuracy, precision, recall, f1, auc) = scores_evaluation(
-            y_test, predicted=predicted)
-
-        metrics_file = config["reports"]["scores"]
-        with open(metrics_file, "w") as f:
-            scores = {
-                "accuracy": accuracy,
-                "precision": precision,
-                "recall": recall,
-                "f1 Score": f1,
-                "roc_auc_score": auc
-            }
-            json.dump(scores, f)
-        logging.info('Metrics Scores file saved')
-
-        with open(model_path, "wb") as file:
-            pickle.dump(best_model, file)
-        logging.info('Model pickle file saved')
-
-        return train_report, test_report, best_model_name, best_model_score
     except Exception as e:
-        logging.info('Exception occured during model training')
+        logging.info('Exception occurred during model training')
         raise CustomException(e, sys)
-
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser()

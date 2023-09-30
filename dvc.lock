@@ -21,8 +21,8 @@ stages:
       size: 2047813
     - path: src/save_and_split_data.py
       hash: md5
-      md5: 8d214f6006b4bed3c9e7bab1e724d32d
-      size: 1504
+      md5: 1425af707d015832d5745f849ce17867
+      size: 1478
     outs:
     - path: artifacts/test.csv
       hash: md5
@@ -88,14 +88,12 @@ stages:
       size: 3568
     - path: src/model_training.py
       hash: md5
-      md5: 5b986289bee1d577914e0128d3434286
-      size: 4636
-    outs:
-    - path: models/model.pkl
+      md5: 1b758513aec0a24c5f43399a8d620efd
+      size: 3694
+  best_production_model:
+    cmd: python src/best_model_for_production.py --config=params.yaml
+    deps:
+    - path: src/best_model_for_production.py
       hash: md5
-      md5: 94b5cd728a9ca42982aaa50173f7a55d
-      size: 142950
-    - path: reports/best_model_scores.json
-      hash: md5
-      md5: 8ab3443ed97becdce8b8716f449a03b6
-      size: 164
+      md5: c2787b5e1f7209aeed54dd3dfff5493c
+      size: 3216

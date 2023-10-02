@@ -1,29 +1,12 @@
 from flask import Flask, render_template, request
-import yaml
-import pickle
 import pandas as pd
+from prediction_pipeline.prediction import predict
 from src.logger import logging
 
 app=Flask(__name__)
 
-params_path = "params.yaml"
-
-def read_params(config_path):
-    with open(config_path) as yaml_file:
-        config = yaml.safe_load(yaml_file)
-    return config
-
-def predict(data):
-    config = read_params(params_path)
-    model_dir_path = config['model']['saved_model']
-    model = pickle.load(open(model_dir_path, 'rb'))
-    prediction = model.predict(data)
-    
-    # Convert the prediction to a human-readable format, e.g., 'Income: >50K'
-    prediction_result = 'Income greater than $50,000' if prediction[0] else 'Income less than or equal to $50,000'
-    
-    return prediction_result
-
+# Specify the path to the configuration file
+config_path = "params.yaml"
 
 @app.route('/')
 def home_page():
@@ -31,9 +14,10 @@ def home_page():
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_datapoint():
-    prediction_result = None  # Initialize prediction result
-    config = read_params(params_path)
-    
+
+    # Assign a default value to prediction_result
+    prediction_result = None
+        
     if request.method == 'POST':
         try:
             if request.form:
@@ -54,16 +38,11 @@ def predict_datapoint():
                     'capital-loss': [int(request.form['capital-loss'])]
                 })
                 
-                # Load the preprocessor from the configuration
-                preprocessor_path = config['data_transformation']['preprocessor_path']
-                preprocessor = pickle.load(open(preprocessor_path, 'rb'))
-                
-                # Transform the input data using the preprocessor
-                data_scaled = preprocessor.transform(data)
+                               
                 logging.info('"Data received and processed successfully."')
                 
                 # Make the prediction
-                prediction_result = predict(data_scaled)
+                prediction_result = predict(data, config_path=config_path)
     
         except Exception as e:
             error = {"error": "Oops, something went wrong. Please try again."}

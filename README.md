@@ -42,7 +42,7 @@ git push -u origin main
 
 ```
 ## Data Retrieval
-To retrieve data from MongoDB, use the retrieve_data.py script. Make sure you have configured your MongoDB connection details in params.yaml.
+To retrieve data from MongoDB, use the retrieve_data.py script. MongoDB connection details in params.yaml.
 ```
 python retrieve_data.py
 ```

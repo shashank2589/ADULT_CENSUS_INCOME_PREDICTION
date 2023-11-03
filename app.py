@@ -47,10 +47,10 @@ def predict_datapoint():
     except Exception as e:
         error = {"error": "Oops, something went wrong. Please try again."}
         logging.error("An error occurred: %s", str(e))
-        return render_template("error.html", error=error)
+        return render_template("error.html", error=str(e))
 
     return render_template('result.html', prediction_result=prediction_result)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=False, port=8080)

@@ -45,9 +45,9 @@ def predict_datapoint():
             prediction_result = predict(data, config_path=config_path)
 
     except Exception as e:
-        error = {"error": "Oops, something went wrong. Please try again."}
+        error = {"error": str(e)}
         logging.error("An error occurred: %s", str(e))
-        return render_template("error.html", error=str(e))
+        return render_template("error.html", error=error)
 
     return render_template('result.html', prediction_result=prediction_result)
 

@@ -52,5 +52,6 @@ def predict_datapoint():
     return render_template('result.html', prediction_result=prediction_result)
 
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=False, port=8080)

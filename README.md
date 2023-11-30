@@ -1,4 +1,4 @@
-👉 [Check out the Income Prediction App](http://13.50.4.196:8080/)
+🔍 Check Out the Web App 👉 [click here](http://13.50.4.196:8080/)
 
 # Income Prediction App
 

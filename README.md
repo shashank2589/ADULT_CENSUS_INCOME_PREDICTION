@@ -1,3 +1,5 @@
+👉 [Check out the Income Prediction App](http://13.50.4.196:8080/)
+
 # Income Prediction App
 
 This project demonstrates the development of an income prediction application. The application predicts whether an individual's income is above or below $50,000 based on various features.
